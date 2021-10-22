@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Route } from "react-router-dom";
 
 import { Header } from "./components";
-import { Browse, Contribute } from "./pages";
+import { Browse, Contribute, Visualize, Picker } from "./pages";
 
 import HomeIcon from "@mui/icons-material/Delete";
 import Login from './pages/auth/Login'
