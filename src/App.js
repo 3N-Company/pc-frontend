@@ -1,19 +1,10 @@
-import { useState, useEffect } from 'react'
+import React from 'react'
 import { Route } from 'react-router-dom'
-
-import { Header } from './components'
-import { Browse, Contribute } from './pages'
-
-import HomeIcon from '@mui/icons-material/Delete'
 import Login from './pages/auth/Login'
+import { Header, Picker } from './components'
+import { Browse, Contribute, Visualize } from './pages'
 
 const App = () => {
-	const [name, setName] = useState('World')
-
-	useEffect(() => {
-		document.title = `Hello, ${ name }`
-	})
-
 	return (
 		<div className="App">
 			<Header/>
@@ -21,6 +12,8 @@ const App = () => {
 			<Route path="/browse" component={ Browse } exact/>
 			<Route path="/contribute" component={ Contribute } exact/>
 			<Route path="/login" component={ Login } exact/>
+			<Route path="/v" component={ Visualize } exact/>
+			<Route path="/p" component={ Picker } exact/>
 		</div>
 	)
 }
