@@ -13,6 +13,6 @@ export const setPhotos = (items) => ({
 export const fetchPhotos = () => (dispatch) => {
   console.log(`Fetching fotos`);
   dispatch(setLoaded(false));
-  const url = `url`;
-  axios.get(url).then(({ data }) => dispatch(setPizzas(data)));
+  const url = `http://0.0.0.0:8080/photo/all`;
+  axios.get(url).then(({ data }) => dispatch(setPhotos(data)));
 };

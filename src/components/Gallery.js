@@ -21,7 +21,7 @@ import FilterRoundedIcon from "@mui/icons-material/FilterRounded";
 import GiteRoundedIcon from "@mui/icons-material/GiteRounded";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 
-export default function MasonryImageList() {
+export default function MasonryImageList({ itemData }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleMenu = (event) => {
@@ -36,13 +36,17 @@ export default function MasonryImageList() {
       <ImageList variant="masonry" cols={4} gap={15}>
         {itemData.map((item) => (
           <ImageListItem key={item.img}>
-            <img src={`${item.img}`} alt={item.title} loading="lazy" />
+            <img
+              src={`http://0.0.0.0:8080/photo/${item}`}
+              alt={item}
+              loading="lazy"
+            />
             <ImageListItemBar
-              title={item.title}
-              subtitle={item.author}
+              title={item}
+              subtitle={item}
               actionIcon={
                 <IconButton
-                  aria-label={`info about ${item.title}`}
+                  aria-label={`info about ${item}`}
                   sx={{ color: "rgb(255,255,255)" }}
                   onClick={handleMenu}
                 >
@@ -122,70 +126,3 @@ export default function MasonryImageList() {
     </Box>
   );
 }
-
-const itemData = [
-  {
-    img: "https://source.unsplash.com/random?water",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/1080x1080?book",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/1080x1920?people",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/random?dresden",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/random?beach",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/random?sky",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/random?clouds",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/random?z",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/random?a",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/random?cell",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/random?box",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/random?animal",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/random?grass",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/random",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/random",
-    title: "Bed",
-  },
-  {
-    img: "https://source.unsplash.com/random",
-    title: "Bed",
-  },
-];
