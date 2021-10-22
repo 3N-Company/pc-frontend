@@ -1,6 +1,8 @@
-# Getting Started with Create React App
+# Vergangenheit Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![example workflow](https://github.com/3N-Company/Vergangenheit-frontend/actions/workflows/ci.yml/badge.svg)
+
+React-based frontend for Dresden Hackathon.
 
 ## Available Scripts
 
