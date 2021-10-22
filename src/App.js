@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
+import { Route } from "react-router-dom";
 
-import "./App.css";
+import { AppBar } from "./components";
+import { Browse, Contribute } from "./pages";
+
+import HomeIcon from "@mui/icons-material/Delete";
 
 const App = () => {
   const [name, setName] = useState("World");
@@ -11,9 +15,15 @@ const App = () => {
 
   return (
     <div className="App">
+      <AppBar />
+      <Route path="/" component={Browse} exact />
+      <Route path="/browse" component={Browse} exact />
+      <Route path="/contribute" component={Contribute} exact />
       <h1>Hello, {name}!</h1>
       {name === "Пёс" ? (
-        <button onClick={() => setName("World")}>сделать как было</button>
+        <button onClick={() => setName("World")}>
+          сделать как было <HomeIcon />
+        </button>
       ) : (
         <button onClick={() => setName("Пёс")}>тык</button>
       )}
