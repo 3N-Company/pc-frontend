@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import Box from "@mui/material/Box";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
@@ -19,13 +20,32 @@ import Typography from "@mui/material/Typography";
 import ArrowDownwardRounded from "@mui/icons-material/ArrowDownward";
 import FilterRoundedIcon from "@mui/icons-material/FilterRounded";
 import GiteRoundedIcon from "@mui/icons-material/GiteRounded";
-import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
+import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 
 export default function MasonryImageList({ itemData }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [currentPhoto, setCurrentPhoto] = useState(0);
 
-  const handleMenu = (event) => {
+  const handleMenu = (event, item) => {
     setAnchorEl(event.currentTarget);
+    setCurrentPhoto(item);
+  };
+
+  const handleDownload = () => {
+    setAnchorEl(null);
+    axios({
+      url: `http://0.0.0.0:8080/photo/${currentPhoto}`,
+      method: "GET",
+      responseType: "blob",
+    }).then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${currentPhoto}.jpg`);
+      document.body.appendChild(link);
+      link.click();
+    });
   };
 
   const handleClose = () => {
@@ -48,7 +68,7 @@ export default function MasonryImageList({ itemData }) {
                 <IconButton
                   aria-label={`info about ${item}`}
                   sx={{ color: "rgb(255,255,255)" }}
-                  onClick={handleMenu}
+                  onClick={(event) => handleMenu(event, item)}
                 >
                   <InfoIcon />
                 </IconButton>
@@ -90,7 +110,7 @@ export default function MasonryImageList({ itemData }) {
             <Divider />
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
-                <ArticleOutlinedIcon fontSize="medium" />
+                <PostAddOutlinedIcon fontSize="medium" />
               </ListItemIcon>
 
               <ListItemText>
@@ -102,11 +122,11 @@ export default function MasonryImageList({ itemData }) {
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
-                <ArticleOutlinedIcon fontSize="medium" />
+                <AddPhotoAlternateOutlinedIcon fontSize="medium" />
               </ListItemIcon>
 
               <ListItemText>
-                Add Data
+                Add Photo
                 <Typography variant="body2" color="text.secondary">
                   Do you have photos of this place?
                 </Typography>
@@ -114,7 +134,8 @@ export default function MasonryImageList({ itemData }) {
             </MenuItem>
 
             <Divider />
-            <MenuItem onClick={handleClose}>
+
+            <MenuItem onClick={handleDownload}>
               <ListItemIcon>
                 <ArrowDownwardRounded fontSize="small" />
               </ListItemIcon>
