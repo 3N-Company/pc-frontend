@@ -42,14 +42,11 @@ export default function Picker({ onPickerSet, zoom, height }) {
     });
   };
 
-  const handleViewportChange = useCallback(
-    (newViewport) => {
-      setMapViewport(newViewport);
-      console.log(newViewport);
-      placeTempMarker(newViewport.longitude, newViewport.latitude, false);
-    },
-    [placeTempMarker]
-  );
+  const handleViewportChange = useCallback((newViewport) => {
+    setMapViewport(newViewport);
+    console.log(newViewport);
+    placeTempMarker(newViewport.longitude, newViewport.latitude, true);
+  });
 
   return (
     <ReactMapGL
@@ -59,7 +56,14 @@ export default function Picker({ onPickerSet, zoom, height }) {
       mapStyle={mapStyle}
       onViewportChange={setMapViewport}
       onClick={(x) => {
-        placeTempMarker(x.lngLat[0], x.lngLat[1], true);
+        console.log("Classlist:", x.target.classList);
+        if (
+          Array.from(x.target.classList.values()).filter((cl) =>
+            cl.includes("mapboxgl-ctrl-geocoder")
+          ).length === 0
+        ) {
+          placeTempMarker(x.lngLat[0], x.lngLat[1], true);
+        }
       }}
     >
       {tempMarker.isSet === true && (
