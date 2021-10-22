@@ -59,6 +59,17 @@ export default function Header () {
 
 						<Button
 							component={ Link }
+							to="/"
+							type="button"
+							variant="outlined"
+							color="inherit"
+							mr={ 5 }
+							sx={{mr: 2}}
+						>
+							Browse
+						</Button>
+						<Button
+							component={ Link }
 							to="/contribute"
 							type="button"
 							variant="outlined"
@@ -103,18 +114,6 @@ export default function Header () {
 					</Toolbar>
 				</Box>
 			</AppBar>
-			<FormGroup>
-				<FormControlLabel
-					control={
-						<Switch
-							checked={ auth }
-							onChange={ handleChange }
-							aria-label="login switch"
-						/>
-					}
-					label={ auth ? 'Logout' : 'Login' }
-				/>
-			</FormGroup>
 		</Box>
 	)
 }
