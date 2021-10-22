@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Route } from "react-router-dom";
 
-import { AppBar } from "./components";
+import { Header } from "./components";
 import { Browse, Contribute } from "./pages";
 
 import HomeIcon from "@mui/icons-material/Delete";
@@ -15,7 +15,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <AppBar />
+      <Header />
       <Route path="/" component={Browse} exact />
       <Route path="/browse" component={Browse} exact />
       <Route path="/contribute" component={Contribute} exact />

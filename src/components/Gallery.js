@@ -23,7 +23,7 @@ import GiteRoundedIcon from "@mui/icons-material/GiteRounded";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 
-export default function MasonryImageList({ itemData }) {
+export default function Gallery({ itemData }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentPhoto, setCurrentPhoto] = useState(0);
 
@@ -51,6 +51,7 @@ export default function MasonryImageList({ itemData }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <Box sx={{ width: "89%", mx: "auto" }}>
       <ImageList variant="masonry" cols={4} gap={15}>

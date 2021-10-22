@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+img.contribute {
+  max-height: 68vh;
+}
+
+img.contribute.cover {
+  object-fit: cover;
+  width: 100%
+}

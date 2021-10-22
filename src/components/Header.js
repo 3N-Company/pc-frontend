@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,7 +13,7 @@ import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 
-export default function MenuAppBar() {
+export default function Header() {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -36,9 +37,18 @@ export default function MenuAppBar() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Photos
             </Typography>
-            <Button variant="outlined" color="inherit" mr={5}>
+
+            <Button
+              component={Link}
+              to="/contribute"
+              type="button"
+              variant="outlined"
+              color="inherit"
+              mr={5}
+            >
               Contribute
             </Button>
+
             {auth && (
               <Box sx={{ borderRadius: 16 }}>
                 <IconButton
