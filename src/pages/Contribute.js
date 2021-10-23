@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from 'react'
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -178,6 +178,16 @@ function Contribute() {
       {isKnown && (
         <Box>
           <Box sx={{ width: "50%", mx: "auto", mb: "15px" }}>
+            { isKnown && (
+              <Button
+                variant="outlined"
+                disableElevation
+                color="error"
+                onClick={ () => setIsKnown(false) }
+              >
+                Close
+              </Button>
+            ) }
             <Typography variant="h4" gutterBottom component="div">
               Please provide some details about this place
             </Typography>
