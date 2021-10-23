@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from "react";
-import ReactMapGL, { Marker } from "react-map-gl";
+import ReactMapGL, { Marker, Layer, Source } from "react-map-gl";
 import Geocoder from "react-map-gl-geocoder";
 
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -7,10 +7,9 @@ import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 const mapboxApiKey =
   "pk.eyJ1Ijoic2llcmlrb3YiLCJhIjoiY2t2MmhqdnNsM3liYzJuczdwcHB5eWZ6ZCJ9.E_DlDzsVz3WFStxFQhILSw";
-const mapStyle =
-  "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json";
+const mapStyle = "mapbox://styles/mapbox/light-v10";
 
-export default function Picker({ onPickerSet, zoom, height }) {
+export default function Picker({ onPickerSet, zoom, height, oldMap }) {
   const mapRef = useRef();
   const [tempMarker, setTempMarker] = useState({
     isSet: false,
@@ -83,6 +82,20 @@ export default function Picker({ onPickerSet, zoom, height }) {
         countries={"DE"}
         position="top-right"
       />
+
+      <Source
+        id="geo-data-1945"
+        type="raster"
+        tiles={[
+          "https://geodienste.sachsen.de/wms_geosn_hist/guest?SERVICE=WMS&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&STYLES=default&VERSION=1.3.0&LAYERS=messtischblatt_vor_1945&WIDTH=1024&HEIGHT=1024&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+        ]}
+      >
+        <Layer
+          type="raster"
+          source="geo-data-1945"
+          layout={{ visibility: oldMap ? "visible" : "none" }}
+        />
+      </Source>
     </ReactMapGL>
   );
 }

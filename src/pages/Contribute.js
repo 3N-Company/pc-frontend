@@ -4,6 +4,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { TextField, Typography } from "@mui/material";
 import { Picker } from "../components";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 import FitScreenOutlinedIcon from "@mui/icons-material/FitScreenOutlined";
 import DoneAllOutlinedIcon from "@mui/icons-material/DoneAllOutlined";
 import DoNotDisturbAltOutlinedIcon from "@mui/icons-material/DoNotDisturbAltOutlined";
@@ -11,6 +13,7 @@ import DoNotDisturbAltOutlinedIcon from "@mui/icons-material/DoNotDisturbAltOutl
 function Contribute() {
   const [cover, setCover] = React.useState(true);
   const [isKnown, setIsKnown] = React.useState(false);
+  const [isMapOld, setIsMapOld] = React.useState(false);
   const [photoId, setPhotoId] = React.useState(1);
   const [info, setInfo] = React.useState(
     {
@@ -138,9 +141,17 @@ function Contribute() {
             <Typography variant="h5" gutterBottom component="div" my={"12px"}>
               Location
               <Typography variant="body2" color="text.secondary">
-                Please select a point on the map (You selected:{" "}
-                {info?.position?.latitude}, {info?.position?.longitude})
+                Please select a point on the map.
+                {info?.position?.longitude &&
+                  `You have selected: ${info?.position?.latitude},
+                ${info?.position?.longitude}`}
               </Typography>
+              <Box>
+                <FormControlLabel
+                  control={<Switch onChange={() => setIsMapOld(!isMapOld)} />}
+                  label="Oldify the map"
+                />
+              </Box>
             </Typography>
           </Box>
           <Box
@@ -154,7 +165,8 @@ function Contribute() {
             <Picker
               onPickerSet={(marker) => handleMarker(marker)}
               zoom={13}
-              height={"400px"}
+              height={"600px"}
+              oldMap={isMapOld}
             />
           </Box>
         </Box>
