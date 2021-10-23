@@ -22,10 +22,12 @@ import FilterRoundedIcon from "@mui/icons-material/FilterRounded";
 import GiteRoundedIcon from "@mui/icons-material/GiteRounded";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
+import { useHistory } from 'react-router-dom'
 
 export default function Gallery({ itemData }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentPhoto, setCurrentPhoto] = useState(0);
+  const history = useHistory()
 
   const handleMenu = (event, item) => {
     setAnchorEl(event.currentTarget);
@@ -55,21 +57,21 @@ export default function Gallery({ itemData }) {
   return (
     <Box sx={{ width: "89%", mx: "auto" }}>
       <ImageList variant="masonry" cols={4} gap={15}>
-        {itemData.map((item) => (
-          <ImageListItem key={item.img}>
+        {itemData.map(({ photoId, meta }) => (
+          <ImageListItem key={photoId}>
             <img
-              src={`http://0.0.0.0:8080/photo/${item}`}
-              alt={item}
+              src={`http://0.0.0.0:8080/photo/${photoId}`}
+              alt={photoId}
               loading="lazy"
             />
             <ImageListItemBar
-              title={item}
-              subtitle={item}
+              title={photoId}
+              subtitle={photoId}
               actionIcon={
                 <IconButton
-                  aria-label={`info about ${item}`}
+                  aria-label={`info about ${photoId}`}
                   sx={{ color: "rgb(255,255,255)" }}
-                  onClick={(event) => handleMenu(event, item)}
+                  onClick={(event) => handleMenu(event, photoId)}
                 >
                   <InfoIcon />
                 </IconButton>
@@ -96,20 +98,8 @@ export default function Gallery({ itemData }) {
           onClose={handleClose}
         >
           <MenuList>
-            <MenuItem onClick={handleClose}>
-              <ListItemIcon>
-                <GiteRoundedIcon fontSize="medium" />
-              </ListItemIcon>
-              <ListItemText>About this region</ListItemText>
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <ListItemIcon>
-                <FilterRoundedIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>More from this region</ListItemText>
-            </MenuItem>
             <Divider />
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={() => history.push(`/contribute/${currentPhoto}`)}>
               <ListItemIcon>
                 <PostAddOutlinedIcon fontSize="medium" />
               </ListItemIcon>
@@ -118,18 +108,6 @@ export default function Gallery({ itemData }) {
                 Add Data
                 <Typography variant="body2" color="text.secondary">
                   Do you know this place?
-                </Typography>
-              </ListItemText>
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <ListItemIcon>
-                <AddPhotoAlternateOutlinedIcon fontSize="medium" />
-              </ListItemIcon>
-
-              <ListItemText>
-                Add Photo
-                <Typography variant="body2" color="text.secondary">
-                  Do you have photos of this place?
                 </Typography>
               </ListItemText>
             </MenuItem>

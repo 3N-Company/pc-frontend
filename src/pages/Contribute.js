@@ -19,6 +19,7 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
+import { useHistory, useParams } from 'react-router-dom'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -39,6 +40,8 @@ function Contribute() {
   );
 
   const [openDialog, setOpenDialog] = React.useState(false);
+  const {photoIdUrl} = useParams()
+  const history = useHistory()
 
   const handleClickOpen = () => {
     setOpenDialog(true);
@@ -60,12 +63,18 @@ function Contribute() {
       url: `http://0.0.0.0:8080/photo/next`,
       method: "GET",
     }).then((response) => {
+      history.push(`/contribute/${response.data}`)
       setPhotoId(response.data);
     });
   };
 
   React.useEffect(() => {
-    requestNextPhoto();
+    if(photoIdUrl === undefined) {
+      requestNextPhoto()
+    } else {
+      setLoading(true)
+      setPhotoId(photoIdUrl)
+    }
   }, []);
 
   return (
