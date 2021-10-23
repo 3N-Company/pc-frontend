@@ -35,6 +35,13 @@ export default function Header () {
 
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget)
+    axios({
+      url: `http://localhost:8080/users/rating`,
+      method: 'GET',
+      withCredentials: true,
+    }).then(
+      ({ data }) => setRating(data)
+    )
 	}
 
 	const handleClose = () => {
