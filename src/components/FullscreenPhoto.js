@@ -23,6 +23,7 @@ const FullscreenPhoto = ({
   photoMeta,
   handleClose,
   requestNextPhoto,
+  showNextPhoto,
 }) => {
   const [photoType, setCurrentPhotoType] = React.useState("original");
   const photoTypeToUrl = {
@@ -77,9 +78,7 @@ const FullscreenPhoto = ({
           >
             colorize
           </Button>
-          {requestNextPhoto === undefined ? (
-            ""
-          ) : (
+          {showNextPhoto && (
             <Button
               autoFocus
               variant="outlined"

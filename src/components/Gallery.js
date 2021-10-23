@@ -74,6 +74,7 @@ export default function Gallery({ itemData }) {
         photoId={currentPhoto}
         isOpened={openDialog}
         handleClose={handleDialogClose}
+        showNextPhoto={false}
       />
       <ImageList variant="masonry" cols={4} gap={15}>
         {itemData.map(({ photoId, meta }) => (
@@ -119,7 +120,9 @@ export default function Gallery({ itemData }) {
         >
           <MenuList>
             <Divider />
-            <MenuItem onClick={() => history.push(`/contribute/${currentPhoto}`)}>
+            <MenuItem
+              onClick={() => history.push(`/contribute/${currentPhoto}`)}
+            >
               <ListItemIcon>
                 <PostAddOutlinedIcon fontSize="medium" />
               </ListItemIcon>
