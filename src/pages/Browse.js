@@ -14,7 +14,7 @@ function Browse() {
 
   return (
     <div>
-      <Box sx={{ width: "70%", mx: "auto", textAlign: "center" }}>
+      <Box sx={{ width: "70%", mx: "auto", textAlign: "center", my: "150px" }}>
         <Typography variant="h1" gutterBottom component="div">
           Experience the Past <br /> of Dresden
         </Typography>

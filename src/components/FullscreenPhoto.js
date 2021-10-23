@@ -17,100 +17,108 @@ const Transition = React.forwardRef(function Transition (props, ref) {
 	return <Slide direction="up" ref={ ref } { ...props } />
 })
 
-const FullscreenPhoto = ({ isOpened, photoId, photoMeta, handleClose, requestNextPhoto }) => {
+const FullscreenPhoto = ({
+  isOpened,
+  photoId,
+  photoMeta,
+  handleClose,
+  requestNextPhoto,
+}) => {
+  const [photoType, setCurrentPhotoType] = React.useState("original");
+  const photoTypeToUrl = {
+    original: `http://localhost:8080/photo/${photoId}`,
+    colorized: `http://localhost:8080/photo/${photoId}/colorized`,
+    upscaled: `http://localhost:8080/photo/${photoId}/upscaled`,
+  };
 
-	const [photoType, setCurrentPhotoType] = React.useState("original");
-	const photoTypeToUrl = {
-		"original": `http://localhost:8080/photo/${photoId}`,
-		"colorized": `http://localhost:8080/photo/${photoId}/colorized`,
-		"upscaled": `http://localhost:8080/photo/${photoId}/upscaled`,
-	}
+  return (
+    <Dialog
+      fullScreen
+      sx={{ background: "#000" }}
+      open={isOpened}
+      onClose={handleClose}
+      TransitionComponent={Transition}
+    >
+      <AppBar sx={{ position: "relative", backgroundColor: "#212121" }}>
+        <Toolbar>
+          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            Fullscreen mode
+          </Typography>
 
-	return (
-		<Dialog
-			fullScreen
-			sx={ { background: '#000' } }
-			open={ isOpened }
-			onClose={ handleClose }
-			TransitionComponent={ Transition }
-		>
-			<AppBar sx={ { position: 'relative', backgroundColor: '#212121' } }>
-				<Toolbar>
-					<Typography sx={ { ml: 2, flex: 1 } } variant="h6" component="div">
-						Fullscreen mode
-					</Typography>
+          <Button
+            autoFocus
+            variant="outlined"
+            variant={photoType === "original" ? "contained" : "outlined"}
+            color={photoType === "original" ? "success" : "inherit"}
+            onClick={() => setCurrentPhotoType("original")}
+            sx={{ mr: "10px" }}
+            startIcon={<InsertPhotoOutlinedIcon />}
+          >
+            Original
+          </Button>
+          <Button
+            autoFocus
+            variant="outlined"
+            variant={photoType === "upscaled" ? "contained" : "outlined"}
+            color={photoType === "upscaled" ? "success" : "inherit"}
+            onClick={() => setCurrentPhotoType("upscaled")}
+            sx={{ mr: "10px" }}
+            startIcon={<BlurOnOutlinedIcon />}
+          >
+            upscale
+          </Button>
+          <Button
+            autoFocus
+            variant={photoType === "colorized" ? "contained" : "outlined"}
+            color={photoType === "colorized" ? "success" : "inherit"}
+            onClick={() => setCurrentPhotoType("colorized")}
+            sx={{ mr: "10px" }}
+            startIcon={<AutoAwesomeOutlinedIcon />}
+          >
+            colorize
+          </Button>
+          {requestNextPhoto === undefined ? (
+            ""
+          ) : (
+            <Button
+              autoFocus
+              variant="outlined"
+              color="inherit"
+              onClick={requestNextPhoto}
+              sx={{ mr: "20px" }}
+              startIcon={<RotateRightOutlinedIcon />}
+            >
+              next one
+            </Button>
+          )}
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={handleClose}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Box
+        sx={{
+          height: "100%",
+          maxHeight: "94vh",
+          background: "#000",
+          display: "flex",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        }}
+      >
+        <img
+          className={"contribute fullscreen"}
+          src={photoTypeToUrl[photoType]}
+          alt=""
+        />
+      </Box>
+    </Dialog>
+  );
+};
 
-
-					<Button
-						autoFocus
-						variant="outlined"
-						color={ photoType === "original" ? 'success' : 'inherit' }
-						onClick={ () => setCurrentPhotoType("original") }
-						sx={ { mr: '10px' } }
-						startIcon={ <InsertPhotoOutlinedIcon/> }
-					>
-						Original
-					</Button>
-					<Button
-						autoFocus
-						variant="outlined"
-						color={ photoType === "upscaled" ? 'success' : 'inherit' }
-						onClick={ () => setCurrentPhotoType("upscaled") }
-						sx={ { mr: '10px' } }
-						startIcon={ <BlurOnOutlinedIcon/> }
-					>
-						upscale
-					</Button>
-					<Button
-						autoFocus
-						variant="outlined"
-						color={ photoType === "colorized" ? 'success' : 'inherit' }
-						onClick={ () => setCurrentPhotoType("colorized") }
-						sx={ { mr: '10px' } }
-						startIcon={ <AutoAwesomeOutlinedIcon/> }
-					>
-						colorize
-					</Button>
-					{ requestNextPhoto === undefined ? ''
-						: <Button
-							autoFocus
-							variant="outlined"
-							color="inherit"
-							onClick={ requestNextPhoto }
-							sx={ { mr: '20px' } }
-							startIcon={ <RotateRightOutlinedIcon/> }
-						>
-							next one
-						</Button>
-					}
-					<IconButton
-						edge="start"
-						color="inherit"
-						onClick={ handleClose }
-						aria-label="close"
-					>
-						<CloseIcon/>
-					</IconButton>
-				</Toolbar>
-			</AppBar>
-			<Box
-				sx={ {
-					height: '100%',
-					maxHeight: '94vh',
-					background: '#000',
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-				} }
-			>
-				<img
-					className={ 'contribute fullscreen' }
-					src={ photoTypeToUrl[photoType] }
-					alt=""
-				/>
-			</Box>
-		</Dialog>
-	)
-}
-
-export default FullscreenPhoto
+export default FullscreenPhoto;
