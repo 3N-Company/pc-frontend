@@ -3,6 +3,7 @@ import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { HeatmapLayer } from "@deck.gl/aggregation-layers";
 import customData from "../assets/example-heat.json";
+import customData2 from "../assets/submission.json";
 
 // Source data CSV
 //const DATA_URL =
@@ -21,7 +22,8 @@ const MAP_STYLE =
   "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json";
 
 export default function Visualize({
-  data = customData,
+  data = customData2,
+  data2 = customData,
   intensity = 1,
   threshold = 0.03,
   radiusPixels = 15,
@@ -29,8 +31,34 @@ export default function Visualize({
 }) {
   const layers = [
     new HeatmapLayer({
-      data,
+      data: customData,
       id: "heatmp-layer",
+      pickable: true,
+      getPosition: (d) => [d[0], d[1]],
+      getWeight: (d) => d[2],
+      aggregation: "SUM",
+      colorRange: [
+        [255, 158, 0],
+        [255, 145, 0],
+        [255, 133, 0],
+        [255, 121, 0],
+        [255, 109, 0],
+      ],
+      radiusPixels,
+      intensity,
+      threshold,
+    }),
+    new HeatmapLayer({
+      data: customData2,
+      id: "heatmp-layer1",
+      aggregation: "SUM",
+      colorRange: [
+        [157, 78, 221],
+        [123, 44, 191],
+        [90, 24, 154],
+        [60, 9, 108],
+        [36, 0, 70],
+      ],
       pickable: false,
       getPosition: (d) => [d[0], d[1]],
       getWeight: (d) => d[2],
