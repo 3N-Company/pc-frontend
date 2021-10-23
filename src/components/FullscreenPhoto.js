@@ -11,12 +11,21 @@ import Box from '@mui/material/Box'
 import Dialog from '@mui/material/Dialog'
 import React from 'react'
 import Slide from '@mui/material/Slide'
+import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
 
 const Transition = React.forwardRef(function Transition (props, ref) {
 	return <Slide direction="up" ref={ ref } { ...props } />
 })
 
 const FullscreenPhoto = ({ isOpened, photoId, photoMeta, handleClose, requestNextPhoto }) => {
+
+	const [photoType, setCurrentPhotoType] = React.useState("original");
+	const photoTypeToUrl = {
+		"original": `http://localhost:8080/photo/${photoId}`,
+		"colorized": `http://localhost:8080/photo/${photoId}/colorized`,
+		"upscaled": `http://localhost:8080/photo/${photoId}/upscaled`,
+	}
+
 	return (
 		<Dialog
 			fullScreen
@@ -31,11 +40,22 @@ const FullscreenPhoto = ({ isOpened, photoId, photoMeta, handleClose, requestNex
 						Fullscreen mode
 					</Typography>
 
+
 					<Button
 						autoFocus
 						variant="outlined"
-						color="inherit"
-						onClick={ handleClose }
+						color={ photoType === "original" ? 'success' : 'inherit' }
+						onClick={ () => setCurrentPhotoType("original") }
+						sx={ { mr: '10px' } }
+						startIcon={ <InsertPhotoOutlinedIcon/> }
+					>
+						Original
+					</Button>
+					<Button
+						autoFocus
+						variant="outlined"
+						color={ photoType === "upscaled" ? 'success' : 'inherit' }
+						onClick={ () => setCurrentPhotoType("upscaled") }
 						sx={ { mr: '10px' } }
 						startIcon={ <BlurOnOutlinedIcon/> }
 					>
@@ -44,8 +64,8 @@ const FullscreenPhoto = ({ isOpened, photoId, photoMeta, handleClose, requestNex
 					<Button
 						autoFocus
 						variant="outlined"
-						color="inherit"
-						onClick={ handleClose }
+						color={ photoType === "colorized" ? 'success' : 'inherit' }
+						onClick={ () => setCurrentPhotoType("colorized") }
 						sx={ { mr: '10px' } }
 						startIcon={ <AutoAwesomeOutlinedIcon/> }
 					>
@@ -85,7 +105,7 @@ const FullscreenPhoto = ({ isOpened, photoId, photoMeta, handleClose, requestNex
 			>
 				<img
 					className={ 'contribute fullscreen' }
-					src={ `http://localhost:8080/photo/${ photoId }` }
+					src={ photoTypeToUrl[photoType] }
 					alt=""
 				/>
 			</Box>
