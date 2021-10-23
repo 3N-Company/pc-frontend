@@ -14,6 +14,17 @@ code {
 
 img.contribute {
   max-height: 68vh;
+  border-radius: 8px;
+}
+
+img.contribute.fullscreen {
+  height: 100%;
+  width: auto;
+  max-height: 92vh;
+  max-width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 0;
 }
 
 img.contribute.cover {

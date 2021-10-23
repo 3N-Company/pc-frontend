@@ -49,13 +49,24 @@ export default function Header() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: "#212121" }}>
         <Box sx={{ flexGrow: 1 }} mx={50}>
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Photos
             </Typography>
 
+            <Button
+              component={Link}
+              to="/"
+              type="button"
+              variant="outlined"
+              color="inherit"
+              mr={5}
+              sx={{ mr: 2 }}
+            >
+              Browse
+            </Button>
             <Button
               component={Link}
               to="/contribute"

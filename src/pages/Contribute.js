@@ -3,18 +3,32 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { TextField, Typography } from "@mui/material";
+import { Skeleton } from "@mui/material";
 import { Picker } from "../components";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import FitScreenOutlinedIcon from "@mui/icons-material/FitScreenOutlined";
 import DoneAllOutlinedIcon from "@mui/icons-material/DoneAllOutlined";
 import DoNotDisturbAltOutlinedIcon from "@mui/icons-material/DoNotDisturbAltOutlined";
+import AutoAwesomeOutlinedIcon from "@mui/icons-material/AutoAwesomeOutlined";
+import RotateRightOutlinedIcon from "@mui/icons-material/RotateRightOutlined";
+import BlurOnOutlinedIcon from "@mui/icons-material/BlurOnOutlined";
+import Dialog from "@mui/material/Dialog";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Slide from "@mui/material/Slide";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function Contribute() {
-  const [cover, setCover] = React.useState(true);
   const [isKnown, setIsKnown] = React.useState(false);
   const [isMapOld, setIsMapOld] = React.useState(false);
-  const [photoId, setPhotoId] = React.useState(1);
+  const [photoId, setPhotoId] = React.useState(0);
+  const [loading, setLoading] = React.useState(true);
   const [info, setInfo] = React.useState(
     {
       position: { latitude: "", longitude: "" },
@@ -24,23 +38,38 @@ function Contribute() {
     []
   );
 
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
+  };
+
   const handleMarker = ({ lat, lon }) =>
     setInfo((prevInfo) => ({
       ...prevInfo,
       position: { latitude: lat.toString(), longitude: lon.toString() },
     }));
 
-  React.useEffect(() => {
+  const requestNextPhoto = () => {
+    setLoading(true);
     axios({
       url: `http://0.0.0.0:8080/photo/next`,
       method: "GET",
     }).then((response) => {
-      console.log(response);
+      setPhotoId(response.data);
     });
+  };
+
+  React.useEffect(() => {
+    requestNextPhoto();
   }, []);
 
   return (
-    <Box sx={{ width: "90%", mx: "auto" }}>
+    <Box sx={{ width: "90%", mx: "auto", mt: "20px" }}>
       <Box
         sx={{
           mx: "auto",
@@ -49,10 +78,25 @@ function Contribute() {
           alignItems: "center",
         }}
       >
+        {loading && (
+          <Skeleton
+            animation="wave"
+            variant="rectangular"
+            sx={{
+              width: "750px",
+              height: "100vh",
+              maxHeight: "64vh",
+              borderRadius: "8px",
+              backgroundColor: "#D3D3D3",
+            }}
+          />
+        )}
         <img
-          className={cover ? "contribute cover" : "contribute "}
+          style={loading ? { display: "none" } : {}}
+          className="contribute"
           src={`http://0.0.0.0:8080/photo/${photoId}`}
           alt=""
+          onLoad={() => setLoading(false)}
         />
       </Box>
       <Box
@@ -67,9 +111,9 @@ function Contribute() {
         <Button
           variant="outlined"
           startIcon={<FitScreenOutlinedIcon />}
-          onClick={() => setCover(!cover)}
+          onClick={() => handleClickOpen(true)}
         >
-          {cover ? "Show original" : "Fit screen"}
+          Open full screen
         </Button>
       </Box>
       {!isKnown && (
@@ -97,7 +141,7 @@ function Contribute() {
             disableElevation
             color="error"
             endIcon={<DoNotDisturbAltOutlinedIcon />}
-            onClick={() => setPhotoId(photoId + 1)}
+            onClick={requestNextPhoto}
           >
             No, maybe next one.
           </Button>
@@ -171,6 +215,76 @@ function Contribute() {
           </Box>
         </Box>
       )}
+      <Dialog
+        fullScreen
+        sx={{ background: "#000" }}
+        open={openDialog}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
+        <AppBar sx={{ position: "relative", backgroundColor: "#212121" }}>
+          <Toolbar>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              Fullscreen mode
+            </Typography>
+
+            <Button
+              autoFocus
+              variant="outlined"
+              color="inherit"
+              onClick={handleClose}
+              sx={{ mr: "10px" }}
+              startIcon={<BlurOnOutlinedIcon />}
+            >
+              upscale
+            </Button>
+            <Button
+              autoFocus
+              variant="outlined"
+              color="inherit"
+              onClick={handleClose}
+              sx={{ mr: "10px" }}
+              startIcon={<AutoAwesomeOutlinedIcon />}
+            >
+              colorize
+            </Button>
+            <Button
+              autoFocus
+              variant="outlined"
+              color="inherit"
+              onClick={requestNextPhoto}
+              sx={{ mr: "20px" }}
+              startIcon={<RotateRightOutlinedIcon />}
+            >
+              next one
+            </Button>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Box
+          sx={{
+            height: "100%",
+            maxHeight: "94vh",
+            background: "#000",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <img
+            className={"contribute fullscreen"}
+            src={`http://0.0.0.0:8080/photo/${photoId}`}
+            alt=""
+          />
+        </Box>
+      </Dialog>
     </Box>
   );
 }
