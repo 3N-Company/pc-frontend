@@ -1,9 +1,8 @@
 import React from "react";
+import axios from "axios";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { HeatmapLayer } from "@deck.gl/aggregation-layers";
-import customData from "../assets/example-heat.json";
-import customData2 from "../assets/submission.json";
 
 // Source data CSV
 //const DATA_URL =
@@ -22,20 +21,50 @@ const MAP_STYLE =
   "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json";
 
 export default function Visualize({
-  data = customData2,
-  data2 = customData,
   intensity = 1,
   threshold = 0.03,
   radiusPixels = 15,
   mapStyle = MAP_STYLE,
 }) {
+  const [submission, setSubmissions] = React.useState([]);
+  const [normalise, setNormalise] = React.useState([]);
+
+  const loadSubmissions = () => {
+    axios({
+      url: `http://localhost:8080/photo/submition/positions`,
+      method: "GET",
+      withCredentials: true,
+    }).then((response) => {
+      console.log(response.data);
+      setSubmissions(response.data);
+    });
+  };
+
+  const loadNormalised = () => {
+    axios({
+      url: `http://localhost:8080/photo/all-with-meta`,
+      method: "GET",
+      withCredentials: true,
+    }).then((response) => {
+      console.log("Data: ", response.data);
+      const clean = response.data.filter((d) => d.metadata.position !== null);
+      console.log("Clean: ", clean);
+      setNormalise(clean);
+    });
+  };
+
+  React.useEffect(() => {
+    setInterval(loadNormalised, 7000);
+    setInterval(loadSubmissions, 7000);
+  }, []);
+
   const layers = [
     new HeatmapLayer({
-      data: customData,
+      data: submission,
       id: "heatmp-layer",
       pickable: true,
-      getPosition: (d) => [d[0], d[1]],
-      getWeight: (d) => d[2],
+      getPosition: (d) => [parseFloat(d.longitude), parseFloat(d.latitude)],
+      getWeight: (d) => 1,
       aggregation: "SUM",
       colorRange: [
         [255, 158, 0],
@@ -49,7 +78,7 @@ export default function Visualize({
       threshold,
     }),
     new HeatmapLayer({
-      data: customData2,
+      data: normalise,
       id: "heatmp-layer1",
       aggregation: "SUM",
       colorRange: [
@@ -60,8 +89,13 @@ export default function Visualize({
         [36, 0, 70],
       ],
       pickable: false,
-      getPosition: (d) => [d[0], d[1]],
-      getWeight: (d) => d[2],
+      getPosition: (d) => {
+        return [
+          parseFloat(d.metadata.position.longitude),
+          parseFloat(d.metadata.position.latitude),
+        ];
+      },
+      getWeight: (d) => 1,
       radiusPixels,
       intensity,
       threshold,
