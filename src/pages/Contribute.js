@@ -185,7 +185,7 @@ function Contribute() {
                 color="error"
                 onClick={ () => setIsKnown(false) }
               >
-                Close
+                Go back
               </Button>
             ) }
             <Typography variant="h4" gutterBottom component="div">
