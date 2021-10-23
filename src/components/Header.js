@@ -167,7 +167,7 @@ export default function Header() {
                       </MenuItem>
                     </React.Fragment>
                   ) : (
-                    <MenuItem onClick={handleSignOut} sx={{ padding: 0 }}>
+                    <MenuItem onClick={handleSignIn} sx={{ padding: 0 }}>
                       <ListItem>
                         <ListItemAvatar>
                           <Avatar>
