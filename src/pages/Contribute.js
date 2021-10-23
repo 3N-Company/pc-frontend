@@ -13,13 +13,15 @@ import DoNotDisturbAltOutlinedIcon from "@mui/icons-material/DoNotDisturbAltOutl
 import AutoAwesomeOutlinedIcon from "@mui/icons-material/AutoAwesomeOutlined";
 import RotateRightOutlinedIcon from "@mui/icons-material/RotateRightOutlined";
 import BlurOnOutlinedIcon from "@mui/icons-material/BlurOnOutlined";
+import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
+import LoadingButton from "@material-ui/lab/LoadingButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
-import { useHistory, useParams } from 'react-router-dom'
+import { buttonBaseClasses } from "@material-ui/core";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -30,18 +32,17 @@ function Contribute() {
   const [isMapOld, setIsMapOld] = React.useState(false);
   const [photoId, setPhotoId] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
+  const [submitText, setSubmitText] = React.useState("Submit data");
   const [info, setInfo] = React.useState(
     {
       position: { latitude: "", longitude: "" },
       name: "no name",
-      year: 0,
+      photoYear: null,
     },
     []
   );
 
   const [openDialog, setOpenDialog] = React.useState(false);
-  const {photoIdUrl} = useParams()
-  const history = useHistory()
 
   const handleClickOpen = () => {
     setOpenDialog(true);
@@ -59,22 +60,32 @@ function Contribute() {
 
   const requestNextPhoto = () => {
     setLoading(true);
+    setSubmitText("Submit data");
+
     axios({
-      url: `http://0.0.0.0:8080/photo/next`,
+      url: `http://localhost:8080/photo/next`,
       method: "GET",
+      withCredentials: true,
     }).then((response) => {
-      history.push(`/contribute/${response.data}`)
       setPhotoId(response.data);
     });
   };
 
+  const submitForm = () => {
+    setSubmitText("Submiting");
+    axios({
+      url: `http://localhost:8080/photo/${photoId}/submit`,
+      data: info,
+      method: "POST",
+      withCredentials: true,
+    }).then((response) => {
+      setSubmitText("Submited");
+      console.log(response);
+    });
+  };
+
   React.useEffect(() => {
-    if(photoIdUrl === undefined) {
-      requestNextPhoto()
-    } else {
-      setLoading(true)
-      setPhotoId(photoIdUrl)
-    }
+    requestNextPhoto();
   }, []);
 
   return (
@@ -163,7 +174,7 @@ function Contribute() {
               Please provide some details about this place
             </Typography>
             <Typography variant="h5" gutterBottom component="div" my={"12px"}>
-              Name and Year
+              Time details
               <Typography variant="body2" color="text.secondary">
                 If you know the date on the photo, please provide below
               </Typography>
@@ -187,10 +198,19 @@ function Contribute() {
               onChange={(event) =>
                 setInfo((prevInfo) => ({
                   ...prevInfo,
-                  year: event.target.value,
+                  photoYear: event.target.value,
                 }))
               }
             />
+            <Button
+              variant="contained"
+              endIcon={<CheckOutlinedIcon />}
+              color={submitText === "Submited" ? "success" : "primary"}
+              onClick={submitForm}
+              sx={{ mt: "8px", ml: "10px" }}
+            >
+              {submitText}
+            </Button>
             <Typography variant="h5" gutterBottom component="div" my={"12px"}>
               Location
               <Typography variant="body2" color="text.secondary">
@@ -212,7 +232,6 @@ function Contribute() {
               width: "82%",
               maxHeight: "200px",
               mx: "auto",
-              marginBottom: "1000px",
             }}
           >
             <Picker
@@ -257,16 +276,18 @@ function Contribute() {
             >
               colorize
             </Button>
-            <Button
-              autoFocus
-              variant="outlined"
-              color="inherit"
-              onClick={requestNextPhoto}
-              sx={{ mr: "20px" }}
-              startIcon={<RotateRightOutlinedIcon />}
-            >
-              next one
-            </Button>
+            {!isKnown && (
+              <Button
+                autoFocus
+                variant="outlined"
+                color="inherit"
+                onClick={requestNextPhoto}
+                sx={{ mr: "20px" }}
+                startIcon={<RotateRightOutlinedIcon />}
+              >
+                next one
+              </Button>
+            )}
             <IconButton
               edge="start"
               color="inherit"
