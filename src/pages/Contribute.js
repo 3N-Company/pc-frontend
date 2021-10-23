@@ -21,6 +21,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { useHistory, useParams } from 'react-router-dom'
+import FullscreenPhoto from '../components/FullscreenPhoto'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -250,76 +251,12 @@ function Contribute() {
           </Box>
         </Box>
       )}
-      <Dialog
-        fullScreen
-        sx={{ background: "#000" }}
-        open={openDialog}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-      >
-        <AppBar sx={{ position: "relative", backgroundColor: "#212121" }}>
-          <Toolbar>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Fullscreen mode
-            </Typography>
-
-            <Button
-              autoFocus
-              variant="outlined"
-              color="inherit"
-              onClick={handleClose}
-              sx={{ mr: "10px" }}
-              startIcon={<BlurOnOutlinedIcon />}
-            >
-              upscale
-            </Button>
-            <Button
-              autoFocus
-              variant="outlined"
-              color="inherit"
-              onClick={handleClose}
-              sx={{ mr: "10px" }}
-              startIcon={<AutoAwesomeOutlinedIcon />}
-            >
-              colorize
-            </Button>
-            <Button
-              autoFocus
-              variant="outlined"
-              color="inherit"
-              onClick={requestNextPhoto}
-              sx={{ mr: "20px" }}
-              startIcon={<RotateRightOutlinedIcon />}
-            >
-              next one
-            </Button>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Box
-          sx={{
-            height: "100%",
-            maxHeight: "94vh",
-            background: "#000",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img
-            className={"contribute fullscreen"}
-            src={`http://0.0.0.0:8080/photo/${photoId}`}
-            alt=""
-          />
-        </Box>
-      </Dialog>
+      <FullscreenPhoto
+        photoId={photoId}
+        photoMeta={{}}
+        handleClose={handleClose}
+        requestNextPhoto={requestNextPhoto}
+        isOpened={openDialog} />
     </Box>
   );
 }

@@ -23,15 +23,26 @@ import GiteRoundedIcon from "@mui/icons-material/GiteRounded";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import { useHistory } from 'react-router-dom'
+import FullscreenPhoto from './FullscreenPhoto'
 
 export default function Gallery({ itemData }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentPhoto, setCurrentPhoto] = useState(0);
+  const [openDialog, setOpenDialog] = useState(false);
   const history = useHistory()
 
   const handleMenu = (event, item) => {
     setAnchorEl(event.currentTarget);
     setCurrentPhoto(item);
+  };
+
+  const handleDialogClickOpen = (id) => {
+    setCurrentPhoto(id)
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
   };
 
   const handleDownload = () => {
@@ -56,6 +67,11 @@ export default function Gallery({ itemData }) {
 
   return (
     <Box sx={{ width: "89%", mx: "auto" }}>
+      <FullscreenPhoto
+        photoId={currentPhoto}
+        isOpened={openDialog}
+        handleClose={handleDialogClose}
+      />
       <ImageList variant="masonry" cols={4} gap={15}>
         {itemData.map(({ photoId, meta }) => (
           <ImageListItem key={photoId}>
@@ -63,6 +79,7 @@ export default function Gallery({ itemData }) {
               src={`http://0.0.0.0:8080/photo/${photoId}`}
               alt={photoId}
               loading="lazy"
+              onClick={() => handleDialogClickOpen(photoId)}
             />
             <ImageListItemBar
               title={photoId}
