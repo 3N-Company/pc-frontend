@@ -28,6 +28,7 @@ import FullscreenPhoto from './FullscreenPhoto'
 export default function Gallery({ itemData }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentPhoto, setCurrentPhoto] = useState(0);
+  const [currentPhotoMeta, setCurrentPhotoMeta] = React.useState({});
   const [openDialog, setOpenDialog] = useState(false);
   const history = useHistory()
 
@@ -36,8 +37,9 @@ export default function Gallery({ itemData }) {
     setCurrentPhoto(item);
   };
 
-  const handleDialogClickOpen = (id) => {
+  const handleDialogClickOpen = (id, meta) => {
     setCurrentPhoto(id)
+    setCurrentPhotoMeta(meta)
     setOpenDialog(true);
   };
 
@@ -68,6 +70,7 @@ export default function Gallery({ itemData }) {
   return (
     <Box sx={{ width: "89%", mx: "auto" }}>
       <FullscreenPhoto
+        photoMeta={currentPhotoMeta}
         photoId={currentPhoto}
         isOpened={openDialog}
         handleClose={handleDialogClose}
@@ -79,7 +82,7 @@ export default function Gallery({ itemData }) {
               src={`http://0.0.0.0:8080/photo/${photoId}`}
               alt={photoId}
               loading="lazy"
-              onClick={() => handleDialogClickOpen(photoId)}
+              onClick={() => handleDialogClickOpen(photoId, meta)}
             />
             <ImageListItemBar
               title={photoId}
