@@ -41,11 +41,14 @@ export default function Picker({ onPickerSet, zoom, height, oldMap }) {
     });
   };
 
-  const handleViewportChange = useCallback((newViewport) => {
-    setMapViewport(newViewport);
-    console.log(newViewport);
-    placeTempMarker(newViewport.longitude, newViewport.latitude, true);
-  });
+  const handleViewportChange = useCallback(
+    (newViewport) => {
+      setMapViewport(newViewport);
+      console.log(newViewport);
+      placeTempMarker(newViewport.longitude, newViewport.latitude, true);
+    },
+    [placeTempMarker]
+  );
 
   return (
     <ReactMapGL

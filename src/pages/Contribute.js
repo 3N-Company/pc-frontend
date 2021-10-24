@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,23 +10,15 @@ import Switch from "@mui/material/Switch";
 import FitScreenOutlinedIcon from "@mui/icons-material/FitScreenOutlined";
 import DoneAllOutlinedIcon from "@mui/icons-material/DoneAllOutlined";
 import DoNotDisturbAltOutlinedIcon from "@mui/icons-material/DoNotDisturbAltOutlined";
-import AutoAwesomeOutlinedIcon from "@mui/icons-material/AutoAwesomeOutlined";
-import RotateRightOutlinedIcon from "@mui/icons-material/RotateRightOutlined";
-import BlurOnOutlinedIcon from "@mui/icons-material/BlurOnOutlined";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import ShortcutOutlinedIcon from "@mui/icons-material/ShortcutOutlined";
-import Slide from "@mui/material/Slide";
 import { useHistory, useParams } from "react-router-dom";
 import FullscreenPhoto from "../components/FullscreenPhoto";
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 function Contribute() {
   const [isKnown, setIsKnown] = React.useState(false);
   const [isMapOld, setIsMapOld] = React.useState(false);
-  const [photoId, setPhotoId] = React.useState(0);
+  const [photoId, setPhotoId] = React.useState(1);
   const [loading, setLoading] = React.useState(true);
   const [submitText, setSubmitText] = React.useState("Submit data");
   const [info, setInfo] = React.useState(
@@ -83,14 +75,18 @@ function Contribute() {
     });
   };
 
-  React.useEffect(() => {
-    if (photoIdUrl === undefined) {
-      requestNextPhoto();
-    } else {
-      setLoading(true);
-      setPhotoId(photoIdUrl);
-    }
-  }, []);
+  React.useEffect(
+    () => {
+      if (photoIdUrl === undefined) {
+        requestNextPhoto();
+      } else {
+        setLoading(true);
+        setPhotoId(photoIdUrl);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   return (
     <Box sx={{ width: "90%", mx: "auto", mt: "20px" }}>

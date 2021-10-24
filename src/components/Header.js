@@ -12,7 +12,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
-import ImageIcon from "@mui/icons-material/Image";
 import DoorSlidingOutlinedIcon from "@mui/icons-material/DoorSlidingOutlined";
 import FlareOutlinedIcon from "@mui/icons-material/FlareOutlined";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -38,7 +37,7 @@ export default function Header() {
         withCredentials: true,
       }).then(({ data }) => setRating(data));
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -63,12 +62,6 @@ export default function Header() {
     history.push("/login");
   };
 
-  const loginMenuItem = isAuthenticated() ? (
-    <MenuItem onClick={handleSignOut}>Log out</MenuItem>
-  ) : (
-    <MenuItem onClick={handleSignIn}>Log in</MenuItem>
-  );
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ backgroundColor: "#212121" }}>
@@ -85,7 +78,7 @@ export default function Header() {
               variant="outlined"
               color="inherit"
               mr={5}
-              sx={{ mr: 2 }}
+              sx={{ mr: "5px" }}
             >
               Browse
             </Button>

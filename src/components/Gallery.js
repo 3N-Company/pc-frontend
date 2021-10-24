@@ -18,10 +18,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Typography from "@mui/material/Typography";
 
 import ArrowDownwardRounded from "@mui/icons-material/ArrowDownward";
-import FilterRoundedIcon from "@mui/icons-material/FilterRounded";
-import GiteRoundedIcon from "@mui/icons-material/GiteRounded";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
-import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import { useHistory } from 'react-router-dom'
 import FullscreenPhoto from './FullscreenPhoto'
 

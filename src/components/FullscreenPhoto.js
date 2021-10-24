@@ -48,7 +48,6 @@ const FullscreenPhoto = ({
 
           <Button
             autoFocus
-            variant="outlined"
             variant={photoType === "original" ? "contained" : "outlined"}
             color={photoType === "original" ? "success" : "inherit"}
             onClick={() => setCurrentPhotoType("original")}
@@ -59,7 +58,6 @@ const FullscreenPhoto = ({
           </Button>
           <Button
             autoFocus
-            variant="outlined"
             variant={photoType === "upscaled" ? "contained" : "outlined"}
             color={photoType === "upscaled" ? "success" : "inherit"}
             onClick={() => setCurrentPhotoType("upscaled")}
