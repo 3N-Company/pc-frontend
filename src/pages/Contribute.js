@@ -14,14 +14,10 @@ import AutoAwesomeOutlinedIcon from "@mui/icons-material/AutoAwesomeOutlined";
 import RotateRightOutlinedIcon from "@mui/icons-material/RotateRightOutlined";
 import BlurOnOutlinedIcon from "@mui/icons-material/BlurOnOutlined";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
-import Dialog from "@mui/material/Dialog";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+import ShortcutOutlinedIcon from "@mui/icons-material/ShortcutOutlined";
 import Slide from "@mui/material/Slide";
-import { useHistory, useParams } from 'react-router-dom'
-import FullscreenPhoto from '../components/FullscreenPhoto'
+import { useHistory, useParams } from "react-router-dom";
+import FullscreenPhoto from "../components/FullscreenPhoto";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -43,8 +39,8 @@ function Contribute() {
   );
 
   const [openDialog, setOpenDialog] = React.useState(false);
-  const {photoIdUrl} = useParams()
-  const history = useHistory()
+  const { photoIdUrl } = useParams();
+  const history = useHistory();
 
   const handleClickOpen = () => {
     setOpenDialog(true);
@@ -69,7 +65,7 @@ function Contribute() {
       method: "GET",
       withCredentials: true,
     }).then((response) => {
-      history.push(`/contribute/${response.data}`)
+      history.push(`/contribute/${response.data}`);
       setPhotoId(response.data);
     });
   };
@@ -88,11 +84,11 @@ function Contribute() {
   };
 
   React.useEffect(() => {
-    if(photoIdUrl === undefined) {
-      requestNextPhoto()
+    if (photoIdUrl === undefined) {
+      requestNextPhoto();
     } else {
-      setLoading(true)
-      setPhotoId(photoIdUrl)
+      setLoading(true);
+      setPhotoId(photoIdUrl);
     }
   }, []);
 
@@ -144,50 +140,55 @@ function Contribute() {
           Open full screen
         </Button>
       </Box>
-      {!isKnown && (
-        <Box
-          sx={{
-            mx: "auto",
-            mt: "21px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+
+      <Box
+        sx={{
+          mx: "auto",
+          mt: "21px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {!isKnown ? (
+          <Box>
+            <Button
+              variant="contained"
+              disableElevation
+              color="success"
+              startIcon={<DoneAllOutlinedIcon />}
+              sx={{ mr: "8px" }}
+              onClick={() => setIsKnown(true)}
+            >
+              Yes, I know this place!
+            </Button>
+            <Button
+              variant="contained"
+              disableElevation
+              color="error"
+              endIcon={<DoNotDisturbAltOutlinedIcon />}
+              onClick={requestNextPhoto}
+            >
+              No, maybe next one.
+            </Button>
+          </Box>
+        ) : (
           <Button
-            variant="contained"
-            disableElevation
-            color="success"
-            startIcon={<DoneAllOutlinedIcon />}
-            sx={{ mr: "8px" }}
-            onClick={() => setIsKnown(true)}
-          >
-            Yes, I know this place!
-          </Button>
-          <Button
-            variant="contained"
+            variant="outlined"
             disableElevation
             color="error"
-            endIcon={<DoNotDisturbAltOutlinedIcon />}
-            onClick={requestNextPhoto}
+            onClick={() => setIsKnown(false)}
+            sx={{ mb: "22px" }}
+            endIcon={<ShortcutOutlinedIcon />}
           >
-            No, maybe next one.
+            Back
           </Button>
-        </Box>
-      )}
+        )}
+      </Box>
+
       {isKnown && (
         <Box>
           <Box sx={{ width: "50%", mx: "auto", mb: "15px" }}>
-            { isKnown && (
-              <Button
-                variant="outlined"
-                disableElevation
-                color="error"
-                onClick={ () => setIsKnown(false) }
-              >
-                Go back
-              </Button>
-            ) }
             <Typography variant="h4" gutterBottom component="div">
               Please provide some details about this place
             </Typography>
